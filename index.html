@@ -1,0 +1,291 @@
+<!DOCTYPE>
+<html>
+<head>
+<title>Графики</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+<script src="jquery.js" type="text/javascript"></script>
+<script src="highcharts.js" type="text/javascript"></script>
+<script>
+
+
+var elevationData=
+{
+0:[],
+1:[],
+2:[],
+3:[]
+};
+
+
+$(function(){
+
+var prev_time = false;
+
+	$.get('data.txt?_=' + new Date().getTime(), function(d) {
+		setInterval(get_data, 1000);
+		function get_data()
+		{
+			$.get('data.txt?_=' + new Date().getTime(), function(d) {
+				d = d.replace("\r", "\n");
+				d = d.replace(/[\n]{2,}/i, "\n");
+				d = d.split("\n");
+				
+				d[0] = d[0].split(',');
+				
+				console.log(d[0][0]);
+				
+				if (typeof d[0][0] == 'undefined' || typeof d[0][1] == 'undefined' || d[0][0]==prev_time) {
+					return;
+				}
+				
+				prev_time=d[0][0];
+				
+				chart0.series[0].addPoint([parseFloat(d[0][0])*1000, parseFloat(d[0][1])], true, true);
+				chart1.series[0].addPoint([parseFloat(d[0][0])*1000, parseFloat(d[0][2])], true, true);
+				chart2.series[0].addPoint([parseFloat(d[0][0])*1000, parseFloat(d[0][3])], true, true);
+				chart3.series[0].addPoint([parseFloat(d[0][0])*1000, parseFloat(d[0][4])], true, true);
+			});
+		}
+	
+	
+		d = d.replace("\r", "\n");
+		d = d.replace(/[\n]{2,}/i, "\n");
+		d = d.split("\n");
+		
+		for (var i = 0; i < d.length; i++) {
+			d[i] = d[i].split(',');
+			if (typeof d[i][0] == 'undefined' || typeof d[i][1] == 'undefined') {
+				continue;
+			}
+						
+			
+			elevationData[0].push([parseFloat(d[i][0])*1000, parseFloat(d[i][1])]);
+			elevationData[1].push([parseFloat(d[i][0])*1000, parseFloat(d[i][2])]);
+			elevationData[2].push([parseFloat(d[i][0])*1000, parseFloat(d[i][3])]);
+			elevationData[3].push([parseFloat(d[i][0])*1000, parseFloat(d[i][4])]);
+		}
+		
+		
+		var chart0=Highcharts.chart('container0', {
+		    chart: {
+		        type: 'area',
+		        zoomType: 'x',
+		        panning: true,
+		        panKey: 'shift'
+		    },
+		    title: {
+		        text: 'График 0'
+		    },
+		    xAxis: {
+		    type: 'datetime',
+	        labels: {
+			    format: '{value:%Y-%d<br>%H:%M}'
+			  },
+		        title: {
+		            text: 'время'
+		        }
+		    },
+		    yAxis: {
+		        startOnTick: true,
+		        endOnTick: false,
+		        title: {
+		            text: null
+		        },
+		        labels: {
+		            format: '{value} значение'
+		        }
+		    },
+		    tooltip: {
+		    	type:'datetime',
+		        headerFormat: '{point.x:%Y-%m-%d  %H:%M:%S.%L} время<br>',
+		        pointFormat: '{point.y} значение',
+		        shared: true
+		    },
+		    legend: {
+		        enabled: false
+		    },
+		    series: [{
+		        data: elevationData[0],
+		        lineColor: Highcharts.getOptions().colors[1],
+		        color: Highcharts.getOptions().colors[2],
+		        fillOpacity: 0.5,
+		        name: 'Elevation',
+		        threshold: null
+		    }]
+		});
+		
+
+		var chart1=Highcharts.chart('container1', {
+		    chart: {
+		        type: 'area',
+		        zoomType: 'x',
+		        panning: true,
+		        panKey: 'shift'
+		    },
+		    title: {
+		        text: 'График 1'
+		    },
+		    xAxis: {
+		    type: 'datetime',
+	        labels: {
+			    format: '{value:%Y-%d<br>%H:%M}'
+			  },
+		        title: {
+		            text: 'время'
+		        }
+		    },
+		    yAxis: {
+		        startOnTick: true,
+		        endOnTick: false,
+		        title: {
+		            text: null
+		        },
+		        labels: {
+		            format: '{value} значение'
+		        }
+		    },
+		    tooltip: {
+		    	type:'datetime',
+		        headerFormat: '{point.x:%Y-%m-%d  %H:%M:%S.%L} время<br>',
+		        pointFormat: '{point.y} значение',
+		        shared: true
+		    },
+		    legend: {
+		        enabled: false
+		    },
+		    series: [{
+		        data: elevationData[1],
+		        lineColor: Highcharts.getOptions().colors[1],
+		        color: Highcharts.getOptions().colors[2],
+		        fillOpacity: 0.5,
+		        name: 'Elevation',
+		        threshold: null
+		    }]
+		});
+		
+		
+		var chart2=Highcharts.chart('container2', {
+		    chart: {
+		        type: 'area',
+		        zoomType: 'x',
+		        panning: true,
+		        panKey: 'shift'
+		    },
+		    title: {
+		        text: 'График 2'
+		    },
+		    xAxis: {
+		    type: 'datetime',
+	        labels: {
+			    format: '{value:%Y-%d<br>%H:%M}'
+			  },
+		        title: {
+		            text: 'время'
+		        }
+		    },
+		    yAxis: {
+		        startOnTick: true,
+		        endOnTick: false,
+		        title: {
+		            text: null
+		        },
+		        labels: {
+		            format: '{value} значение'
+		        }
+		    },
+		    tooltip: {
+		    	type:'datetime',
+		        headerFormat: '{point.x:%Y-%m-%d  %H:%M:%S.%L} время<br>',
+		        pointFormat: '{point.y} значение',
+		        shared: true
+		    },
+		    legend: {
+		        enabled: false
+		    },
+		    series: [{
+		        data: elevationData[2],
+		        lineColor: Highcharts.getOptions().colors[1],
+		        color: Highcharts.getOptions().colors[2],
+		        fillOpacity: 0.5,
+		        name: 'Elevation',
+		        threshold: null
+		    }]
+		});
+		
+		
+		var chart3=Highcharts.chart('container3', {
+		    chart: {
+		        type: 'area',
+		        zoomType: 'x',
+		        panning: true,
+		        panKey: 'shift'
+		    },
+		    title: {
+		        text: 'График 3'
+		    },
+		    xAxis: {
+		    type: 'datetime',
+	        labels: {
+			    format: '{value:%Y-%d<br>%H:%M}'
+			  },
+		        title: {
+		            text: 'время'
+		        }
+		    },
+		    yAxis: {
+		        startOnTick: true,
+		        endOnTick: false,
+		        title: {
+		            text: null
+		        },
+		        labels: {
+		            format: '{value} значение'
+		        }
+		    },
+		    tooltip: {
+		    	type:'datetime',
+		        headerFormat: '{point.x:%Y-%m-%d  %H:%M:%S.%L} время<br>',
+		        pointFormat: '{point.y} значение',
+		        shared: true
+		    },
+		    legend: {
+		        enabled: false
+		    },
+		    series: [{
+		        data: elevationData[3],
+		        lineColor: Highcharts.getOptions().colors[1],
+		        color: Highcharts.getOptions().colors[2],
+		        fillOpacity: 0.5,
+		        name: 'Elevation',
+		        threshold: null
+		    }]
+		});
+		
+		
+	});
+
+
+});
+
+</script>
+<style>
+#container0,#container1,#container2,#container3 {
+    max-width: 800px;
+    min-width: 380px;
+    height: 400px;
+    margin: 1em auto;
+}
+</style>
+</head>
+<body>
+
+
+<div id="container0" style="height:400px;min-width:380px"></div>
+<div id="container1" style="height:400px;min-width:380px"></div>
+<div id="container2" style="height:400px;min-width:380px"></div>
+<div id="container3" style="height:400px;min-width:380px"></div>
+
+
+</body>
+</html>
